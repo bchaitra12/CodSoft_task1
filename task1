@@ -1,0 +1,129 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ToDoListApp {
+
+    private ArrayList<Task> taskList;
+    private Scanner scanner;
+
+    public ToDoListApp() {
+        taskList = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void startApp() {
+        displayWelcomeMessage();
+
+        while (true) {
+            displayMenu();
+            int choice = getUserChoice();
+
+            switch (choice) {
+                case 1:
+                    addTask();
+                    break;
+                case 2:
+                    viewTasks();
+                    break;
+                case 3:
+                    editTask();
+                    break;
+                case 4:
+                    deleteTask();
+                    break;
+                case 5:
+                    System.out.println("Exiting ToDo List App. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+            }
+        }
+    }
+
+    private void displayWelcomeMessage() {
+        System.out.println("Welcome to ToDo List App");
+        System.out.println("========================");
+    }
+
+    private void displayMenu() {
+        System.out.println("\nSelect an option:");
+        System.out.println("1. Add Task");
+        System.out.println("2. View Tasks");
+        System.out.println("3. Edit Task");
+        System.out.println("4. Delete Task");
+        System.out.println("5. Exit");
+    }
+
+    private int getUserChoice() {
+        System.out.print("Enter your choice: ");
+        return scanner.nextInt();
+    }
+
+    private void addTask() {
+        scanner.nextLine(); // Consume newline left-over
+        System.out.print("Enter task description: ");
+        String description = scanner.nextLine();
+        Task task = new Task(description);
+        taskList.add(task);
+        System.out.println("Task added successfully!");
+    }
+
+    private void viewTasks() {
+        System.out.println("\nTasks:");
+        for (int i = 0; i < taskList.size(); i++) {
+            System.out.println((i + 1) + ". " + taskList.get(i).getDescription());
+        }
+    }
+
+    private void editTask() {
+        viewTasks();
+        System.out.print("\nEnter task number to edit: ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine(); // Consume newline left-over
+        if (isValidTaskNumber(taskNumber)) {
+            System.out.print("Enter new task description: ");
+            String newDescription = scanner.nextLine();
+            taskList.get(taskNumber - 1).setDescription(newDescription);
+            System.out.println("Task updated successfully!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    private void deleteTask() {
+        viewTasks();
+        System.out.print("\nEnter task number to delete: ");
+        int taskNumber = scanner.nextInt();
+        if (isValidTaskNumber(taskNumber)) {
+            taskList.remove(taskNumber - 1);
+            System.out.println("Task deleted successfully!");
+        } else {
+            System.out.println("Invalid task number.");
+        }
+    }
+
+    private boolean isValidTaskNumber(int taskNumber) {
+        return taskNumber > 0 && taskNumber <= taskList.size();
+    }
+
+    public static void main(String[] args) {
+        ToDoListApp app = new ToDoListApp();
+        app.startApp();
+    }
+
+    public static class Task {
+        private String description;
+
+        public Task(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+    }
+}
