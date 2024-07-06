@@ -1,0 +1,114 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Student {
+    private String name;
+    private int id;
+    private int attendanceCount;
+
+    public Student(String name, int id) {
+        this.name = name;
+        this.id = id;
+        this.attendanceCount = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getAttendanceCount() {
+        return attendanceCount;
+    }
+
+    public void markAttendance() {
+        attendanceCount++;
+    }
+}
+
+public class AttendanceApp {
+    private List<Student> students;
+    private Scanner scanner;
+
+    public AttendanceApp() {
+        students = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void addStudent() {
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter student ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        students.add(new Student(name, id));
+        System.out.println("Student added successfully!");
+    }
+
+    public void markAttendance() {
+        System.out.print("Enter student ID to mark attendance: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        for (Student student : students) {
+            if (student.getId() == id) {
+                student.markAttendance();
+                System.out.println("Attendance marked for " + student.getName());
+                return;
+            }
+        }
+
+        System.out.println("Student not found!");
+    }
+
+    public void displayAttendance() {
+        if (students.isEmpty()) {
+            System.out.println("No students available.");
+            return;
+        }
+
+        System.out.println("Attendance Records:");
+        for (Student student : students) {
+            System.out.println("Name: " + student.getName() + ", ID: " + student.getId() + ", Attendance: " + student.getAttendanceCount());
+        }
+    }
+
+    public static void main(String[] args) {
+        AttendanceApp app = new AttendanceApp();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nUniversity Attendance App");
+            System.out.println("1. Add Student");
+            System.out.println("2. Mark Attendance");
+            System.out.println("3. Display Attendance");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    app.addStudent();
+                    break;
+                case 2:
+                    app.markAttendance();
+                    break;
+                case 3:
+                    app.displayAttendance();
+                    break;
+                case 4:
+                    System.out.println("Exiting the application.");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}
